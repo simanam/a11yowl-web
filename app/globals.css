@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* WCAG 2.2 — Focus visible (2.4.7) with 3:1 contrast */
+  *:focus-visible {
+    outline: 3px solid #c93a30;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Skip to main content link — WCAG 2.4.1 */
+  .skip-link {
+    @apply absolute -top-12 left-4 z-50 bg-white dark:bg-slate-900 text-slate-900 dark:text-white px-4 py-2 rounded-md font-semibold text-sm;
+    transition: top 0.2s;
+  }
+  .skip-link:focus {
+    @apply top-4;
+  }
+
+  /* Smooth scroll but respect reduced motion — WCAG 2.3.3 */
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Score gauge animation */
+@keyframes gauge-fill {
+  from {
+    stroke-dashoffset: 283;
+  }
+}
+.gauge-circle {
+  animation: gauge-fill 1.5s ease-out forwards;
+}
