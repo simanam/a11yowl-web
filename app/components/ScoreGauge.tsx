@@ -4,12 +4,20 @@ interface ScoreGaugeProps {
   score: number;
   label: string;
   size?: number;
+  showVerdict?: boolean;
+}
+
+function getVerdict(score: number): { text: string; className: string } {
+  if (score < 50) return { text: "High Risk", className: "text-owl-danger" };
+  if (score < 80) return { text: "Needs Work", className: "text-owl-warning" };
+  return { text: "Looking Good", className: "text-owl-success" };
 }
 
 export default function ScoreGauge({
   score,
   label,
   size = 160,
+  showVerdict = false,
 }: ScoreGaugeProps) {
   const radius = 45;
   const circumference = 2 * Math.PI * radius;
@@ -22,6 +30,7 @@ export default function ScoreGauge({
   };
 
   const color = getColor(score);
+  const verdict = getVerdict(score);
 
   return (
     <div className="flex flex-col items-center">
@@ -30,7 +39,7 @@ export default function ScoreGauge({
         height={size}
         viewBox="0 0 100 100"
         role="img"
-        aria-label={`${label}: ${Math.round(score)} out of 100`}
+        aria-label={`${label}: ${Math.round(score)} out of 100${showVerdict ? ` — ${verdict.text}` : ""}`}
       >
         {/* Background circle */}
         <circle
@@ -81,6 +90,11 @@ export default function ScoreGauge({
       <div className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-400">
         {label}
       </div>
+      {showVerdict && (
+        <div className={`mt-1 text-sm font-semibold ${verdict.className}`}>
+          {verdict.text}
+        </div>
+      )}
     </div>
   );
 }

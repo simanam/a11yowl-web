@@ -3,13 +3,22 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "A11y Owl - Accessibility & AI Readiness Scanner",
+  title: "A11y Owl - Accessibility Scanner Powered by Vision AI",
   description:
-    "Free accessibility scanner with dual scoring: Compliance Risk + AI Discoverability. Find ADA/WCAG issues and AI readiness gaps in seconds.",
+    "Free accessibility scanner that finds WCAG issues automated tools miss. Get your Compliance Risk Score and detailed fix report in 60 seconds.",
+  icons: {
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
-    title: "A11y Owl - Accessibility & AI Readiness Scanner",
+    title: "A11y Owl - Accessibility Scanner Powered by Vision AI",
     description:
-      "Scan any URL for free. Get your Compliance Risk Score and AIO Score in under 60 seconds.",
+      "Scan any URL for free. Get your Compliance Risk Score in under 60 seconds.",
     url: "https://a11yowl.com",
     siteName: "A11y Owl",
     type: "website",

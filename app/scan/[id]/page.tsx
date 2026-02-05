@@ -14,6 +14,20 @@ const PROGRESS_STAGES = [
   { key: "analyzing", label: "AI agents analyzing your site" },
 ];
 
+const SEVERITY_BORDER: Record<string, string> = {
+  critical: "border-l-4 border-l-red-500",
+  high: "border-l-4 border-l-orange-500",
+  medium: "border-l-4 border-l-amber-500",
+  low: "border-l-4 border-l-blue-500",
+};
+
+const SEVERITY_BAR_COLORS: Record<string, string> = {
+  critical: "bg-red-500",
+  high: "bg-orange-500",
+  medium: "bg-amber-500",
+  low: "bg-blue-500",
+};
+
 function SeverityBadge({ severity }: { severity: string }) {
   const styles: Record<string, string> = {
     critical:
@@ -32,6 +46,21 @@ function SeverityBadge({ severity }: { severity: string }) {
       {severity}
     </span>
   );
+}
+
+function getScoreContext(score: number, type: "compliance" | "aio"): string {
+  if (type === "compliance") {
+    if (score < 50)
+      return "Your site has significant accessibility gaps that could expose you to ADA litigation.";
+    if (score < 80)
+      return "Your site has moderate accessibility issues. Addressing the critical ones first will reduce your risk.";
+    return "Your site meets most accessibility standards. Focus on the remaining issues to stay ahead.";
+  }
+  if (score < 50)
+    return "AI search engines will struggle to read and cite your content.";
+  if (score < 80)
+    return "Your site has partial AI readability. Fixing structural issues will improve discoverability.";
+  return "Your site is well-structured for AI discovery. Keep it up.";
 }
 
 export default function ScanPage() {
@@ -85,8 +114,9 @@ export default function ScanPage() {
       >
         <a
           href="/"
-          className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white"
+          className="flex items-center gap-2 text-xl font-extrabold tracking-tight text-slate-900 dark:text-white"
         >
+          <img src="/assest/A11YOWL_logo.png" alt="" width={32} height={32} className="w-8 h-8" aria-hidden="true" />
           A11y Owl
         </a>
         <div className="flex items-center gap-3">
@@ -95,6 +125,9 @@ export default function ScanPage() {
               {scan.url}
             </span>
           )}
+          <a href="/contact" className="hidden sm:inline-block text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+            Contact
+          </a>
           <ThemeToggle />
         </div>
       </nav>
@@ -219,6 +252,28 @@ export default function ScanPage() {
   const issues = scan.sample_issues || [];
   const hiddenCount = Math.max(0, scan.issues_found - issues.length);
 
+  // Lawsuit cost calculator — uses same formula as backend
+  const criticalCount = issues.filter((i) => i.severity === "critical").length;
+  const highCount = issues.filter((i) => i.severity === "high").length;
+  const totalIssues = scan.issues_found;
+  const hasLawsuitRisk = criticalCount > 0 || highCount > 0;
+  const lawsuitEstimate = hasLawsuitRisk
+    ? {
+        settlement: 10000 + 5000 * criticalCount + 2000 * highCount,
+        legalFees: 15000,
+        remediation: 500 * totalIssues,
+        total: 10000 + 5000 * criticalCount + 2000 * highCount + 15000 + 500 * totalIssues,
+      }
+    : null;
+
+  // Count severities from visible issues for summary bar
+  const severityCounts: Record<string, number> = { critical: 0, high: 0, medium: 0, low: 0 };
+  issues.forEach((i) => {
+    if (severityCounts[i.severity] !== undefined) {
+      severityCounts[i.severity]++;
+    }
+  });
+
   return (
     <>
       {header}
@@ -233,14 +288,103 @@ export default function ScanPage() {
             Scan Results
           </h1>
           <p className="text-center text-slate-500 dark:text-slate-400 mb-10">
-            {scan.issues_found} {scan.issues_found === 1 ? "issue" : "issues"} found on your site
+            {scan.issues_found} {scan.issues_found === 1 ? "issue" : "issues"} found on{" "}
+            <span className="font-medium text-slate-700 dark:text-slate-300">{scan.url}</span>
           </p>
 
-          {/* Dual Score Gauges */}
-          <div className="flex flex-col sm:flex-row justify-center gap-8 sm:gap-16 mb-12">
-            <ScoreGauge score={complianceScore} label="Compliance Risk" />
-            <ScoreGauge score={aioScore} label="AIO Score" />
+          {/* Score Gauges */}
+          <div className="flex flex-col sm:flex-row justify-center gap-8 sm:gap-16 mb-6">
+            <ScoreGauge score={complianceScore} label="Compliance Risk" showVerdict />
+            {scan.include_aio && (
+              <ScoreGauge score={aioScore} label="AIO Score" showVerdict />
+            )}
           </div>
+
+          {/* Score Context */}
+          <div className={`grid grid-cols-1 ${scan.include_aio ? "sm:grid-cols-2" : ""} gap-4 max-w-2xl mx-auto mb-6`}>
+            <p className="text-sm text-slate-500 dark:text-slate-400 text-center leading-relaxed">
+              {getScoreContext(complianceScore, "compliance")}
+            </p>
+            {scan.include_aio && (
+              <p className="text-sm text-slate-500 dark:text-slate-400 text-center leading-relaxed">
+                {getScoreContext(aioScore, "aio")}
+              </p>
+            )}
+          </div>
+
+          {/* AIO Upsell Card — shown when AIO was not included */}
+          {!scan.include_aio && (
+            <div className="max-w-2xl mx-auto mb-12 p-6 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-owl-accent/10 flex items-center justify-center flex-shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c93a30" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-slate-900 dark:text-white">
+                    Want to know if AI can find your site?
+                  </h3>
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                    Our AIO Score checks whether AI search engines like ChatGPT and Perplexity can read, understand, and cite your content. Get your score in the full report.
+                  </p>
+                  <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
+                    Available in the Full Report — $7.99
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {scan.include_aio && <div className="mb-6" />}
+
+          {/* Lawsuit Risk Calculator */}
+          {lawsuitEstimate && (
+            <div className="max-w-2xl mx-auto mb-12 p-6 rounded-2xl border-2 border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-950/30">
+              <h3 className="text-lg font-bold text-red-700 dark:text-red-400 mb-1">
+                Estimated Lawsuit Exposure
+              </h3>
+              <p className="text-sm text-red-600/70 dark:text-red-400/70 mb-4">
+                Based on 2024 ADA lawsuit settlement data
+              </p>
+              <div className="text-center mb-4">
+                <span className="text-4xl sm:text-5xl font-extrabold text-red-600 dark:text-red-400">
+                  ${lawsuitEstimate.total.toLocaleString()}
+                </span>
+                <p className="text-sm text-red-600/70 dark:text-red-400/70 mt-1">
+                  estimated total exposure
+                </p>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between py-2 border-b border-red-200 dark:border-red-800">
+                  <span className="text-red-700 dark:text-red-400">
+                    Settlement risk ({criticalCount} critical + {highCount} high)
+                  </span>
+                  <span className="font-bold text-red-600 dark:text-red-400">
+                    ${lawsuitEstimate.settlement.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-red-200 dark:border-red-800">
+                  <span className="text-red-700 dark:text-red-400">Legal fees (flat estimate)</span>
+                  <span className="font-bold text-red-600 dark:text-red-400">
+                    ${lawsuitEstimate.legalFees.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between py-2">
+                  <span className="text-red-700 dark:text-red-400">
+                    Remediation ({totalIssues} issues)
+                  </span>
+                  <span className="font-bold text-red-600 dark:text-red-400">
+                    ${lawsuitEstimate.remediation.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+              <p className="mt-4 text-xs text-red-500/60 dark:text-red-500/50">
+                Actual amounts vary by jurisdiction and case specifics. This estimate is for informational purposes only.
+              </p>
+            </div>
+          )}
 
           {/* Sample Issues */}
           <section aria-label="Issues found">
@@ -248,27 +392,39 @@ export default function ScanPage() {
               Issues Found
             </h2>
             <div className="space-y-4 mb-6">
-              {issues.map((issue) => (
+              {issues.map((issue, index) => (
                 <article
                   key={issue.id}
-                  className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
+                  className={`rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 hover:border-slate-300 dark:hover:border-slate-700 transition-colors ${SEVERITY_BORDER[issue.severity] || ""}`}
                 >
                   <div className="flex items-start justify-between gap-3 mb-2">
-                    <h3 className="font-semibold text-slate-900 dark:text-white">
-                      {issue.type
-                        .replace(/_/g, " ")
-                        .replace(/\b\w/g, (c: string) => c.toUpperCase())}
-                    </h3>
+                    <div className="flex items-center gap-3">
+                      <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-bold flex items-center justify-center" aria-label={`Issue ${index + 1}`}>
+                        {index + 1}
+                      </span>
+                      <h3 className="font-semibold text-slate-900 dark:text-white">
+                        {issue.type
+                          .replace(/_/g, " ")
+                          .replace(/\b\w/g, (c: string) => c.toUpperCase())}
+                      </h3>
+                    </div>
                     <SeverityBadge severity={issue.severity} />
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed ml-10">
                     {issue.description}
                   </p>
-                  {issue.wcag_criterion && (
-                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-3">
-                      WCAG {issue.wcag_criterion}
-                    </p>
-                  )}
+                  <div className="flex flex-wrap items-center gap-3 mt-3 ml-10">
+                    {issue.wcag_criterion && (
+                      <span className="text-xs text-slate-400 dark:text-slate-500">
+                        WCAG {issue.wcag_criterion}
+                      </span>
+                    )}
+                    {issue.element_selector && (
+                      <code className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded font-mono">
+                        {issue.element_selector}
+                      </code>
+                    )}
+                  </div>
                 </article>
               ))}
             </div>
@@ -298,11 +454,14 @@ export default function ScanPage() {
                   <p className="font-bold text-lg text-slate-900 dark:text-white mb-1">
                     {hiddenCount} more {hiddenCount === 1 ? "issue" : "issues"} found
                   </p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                    Get the full report with all issues and fixes.
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 max-w-xs mx-auto">
+                    Get the full report with annotated screenshots and code fixes for every issue.
                   </p>
                   <button
-                    onClick={() => setShowEmailModal(true)}
+                    onClick={() => {
+                      console.log("[ScanPage] Get Full Report clicked, opening modal");
+                      setShowEmailModal(true);
+                    }}
                     className="inline-flex items-center justify-center h-12 px-8 bg-owl-accent hover:bg-owl-accent-hover text-white font-semibold rounded-xl transition-colors"
                   >
                     Get Full Report
@@ -316,7 +475,10 @@ export default function ScanPage() {
           {hiddenCount === 0 && !reportSent && (
             <div className="text-center mt-10">
               <button
-                onClick={() => setShowEmailModal(true)}
+                onClick={() => {
+                  console.log("[ScanPage] Get Detailed PDF Report clicked, opening modal");
+                  setShowEmailModal(true);
+                }}
                 className="inline-flex items-center justify-center h-12 px-8 bg-owl-accent hover:bg-owl-accent-hover text-white font-semibold rounded-xl transition-colors"
               >
                 Get Detailed PDF Report
@@ -324,8 +486,52 @@ export default function ScanPage() {
             </div>
           )}
 
-          {/* Platform selection after report sent */}
-          {reportSent && <PlatformCTA />}
+          {/* Summary + Platform selection after report sent */}
+          {reportSent && (
+            <>
+              {/* Severity Summary Bar */}
+              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 mt-10">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                  Your report is on the way
+                </h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+                  Check your inbox for the full PDF with annotated screenshots, WCAG references, and code fixes for all {scan.issues_found} issues.
+                </p>
+                {scan.issues_found > 0 && (
+                  <div>
+                    <div className="flex rounded-full overflow-hidden h-3 bg-slate-100 dark:bg-slate-800" role="img" aria-label={`Severity breakdown: ${severityCounts.critical} critical, ${severityCounts.high} high, ${severityCounts.medium} medium, ${severityCounts.low} low`}>
+                      {(["critical", "high", "medium", "low"] as const).map((sev) => {
+                        const count = severityCounts[sev];
+                        if (!count) return null;
+                        const pct = (count / issues.length) * 100;
+                        return (
+                          <div
+                            key={sev}
+                            className={`${SEVERITY_BAR_COLORS[sev]}`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        );
+                      })}
+                    </div>
+                    <div className="flex flex-wrap gap-4 mt-3">
+                      {(["critical", "high", "medium", "low"] as const).map((sev) => {
+                        const count = severityCounts[sev];
+                        if (!count) return null;
+                        return (
+                          <div key={sev} className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+                            <span className={`w-2.5 h-2.5 rounded-full ${SEVERITY_BAR_COLORS[sev]}`} />
+                            {count} {sev}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <PlatformCTA />
+            </>
+          )}
         </div>
       </main>
 
@@ -337,26 +543,37 @@ export default function ScanPage() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <div className="text-lg font-extrabold text-slate-900 dark:text-white">
+              <div className="flex items-center gap-2 text-lg font-extrabold text-slate-900 dark:text-white">
+                <img src="/assest/A11YOWL_logo.png" alt="" width={28} height={28} className="w-7 h-7" aria-hidden="true" />
                 A11y Owl
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                Source-first accessibility for small businesses.
+                Accessibility scanning powered by vision AI.
               </p>
             </div>
-            <p className="text-xs text-slate-400 dark:text-slate-500">
-              &copy; {new Date().getFullYear()} A11y Owl. All rights reserved.
-            </p>
+            <div className="text-right">
+              <p className="text-xs text-slate-400 dark:text-slate-500">
+                A product of <a href="https://www.logixtecs.com/" target="_blank" rel="noopener noreferrer" className="text-owl-accent hover:underline">Logixtecs</a>
+              </p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                &copy; {new Date().getFullYear()} A11y Owl. All rights reserved.
+              </p>
+            </div>
           </div>
         </div>
       </footer>
 
       {/* Email Modal */}
+      {console.log("[ScanPage] Rendering EmailModal, isOpen:", showEmailModal)}
       <EmailModal
         scanId={scanId}
         isOpen={showEmailModal}
-        onClose={() => setShowEmailModal(false)}
+        onClose={() => {
+          console.log("[ScanPage] Modal onClose called");
+          setShowEmailModal(false);
+        }}
         onSuccess={() => {
+          console.log("[ScanPage] Modal onSuccess called");
           setReportSent(true);
           setShowEmailModal(false);
         }}
