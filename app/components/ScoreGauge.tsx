@@ -34,10 +34,14 @@ export default function ScoreGauge({
 
   return (
     <div className="flex flex-col items-center">
+      {/* The SVG uses a viewBox so it scales to any width. We use max-w to
+          cap the visual size while letting it shrink on mobile. */}
       <svg
         width={size}
         height={size}
         viewBox="0 0 100 100"
+        className="w-[120px] h-[120px] sm:w-auto sm:h-auto"
+        style={{ maxWidth: size, maxHeight: size }}
         role="img"
         aria-label={`${label}: ${Math.round(score)} out of 100${showVerdict ? ` — ${verdict.text}` : ""}`}
       >

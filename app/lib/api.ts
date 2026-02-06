@@ -25,6 +25,7 @@ export interface ScanStatusResponse {
   compliance_score: number | null;
   aio_score: number | null;
   include_aio: boolean;
+  aio_available: boolean;
   error_message: string | null;
   sample_issues: ScanIssue[] | null;
 }
@@ -35,13 +36,12 @@ export interface ReportResponse {
 }
 
 export async function startScan(
-  url: string,
-  includeAio: boolean = false
+  url: string
 ): Promise<ScanResponse> {
   const res = await fetch(`${API_URL}/api/v1/scan/quick`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ url, include_aio: includeAio }),
+    body: JSON.stringify({ url, include_aio: true }),
   });
   if (!res.ok) {
     const error = await res.json().catch(() => ({}));
@@ -63,12 +63,16 @@ export async function getScanStatus(
 export async function requestReport(
   scanId: string,
   email: string,
-  reportType: string = "free"
+  platform?: string
 ): Promise<ReportResponse> {
+  const body: Record<string, string> = { email, report_type: "full" };
+  if (platform) {
+    body.platform_selected = platform;
+  }
   const res = await fetch(`${API_URL}/api/v1/scan/${scanId}/report`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, report_type: reportType }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
     const error = await res.json().catch(() => ({}));

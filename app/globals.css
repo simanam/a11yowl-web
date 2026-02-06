@@ -34,6 +34,15 @@
       transition-duration: 0.01ms !important;
     }
   }
+
+  /* Prevent white flash on dark mode — set bg before JS loads */
+  html.dark {
+    background-color: #020617; /* slate-950 */
+    color-scheme: dark;
+  }
+  html:not(.dark) {
+    color-scheme: light;
+  }
 }
 
 body {
@@ -49,4 +58,19 @@ body {
 }
 .gauge-circle {
   animation: gauge-fill 1.5s ease-out forwards;
+}
+
+@layer utilities {
+  /* Stroke utility for Tailwind — used by progress ring */
+  .stroke-owl-accent {
+    stroke: #c93a30;
+  }
+
+  /* Ensure minimum touch targets on mobile — WCAG 2.5.8 */
+  @media (pointer: coarse) {
+    .touch-target {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
 }
