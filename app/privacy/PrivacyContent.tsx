@@ -37,7 +37,7 @@ export default function PrivacyContent() {
             {/* Introduction */}
             <section>
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-                A11y Owl (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) is a product of Logixtecs. This Privacy Policy explains how we collect, use, disclose, and protect your personal information when you use our website accessibility scanning service at a11yowl.com (the &ldquo;Service&rdquo;). By using the Service, you agree to the collection and use of information in accordance with this policy.
+                A11y Owl (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) is a product of Logixtecs. This Privacy Policy explains how we collect, use, disclose, and protect your personal information when you use our website accessibility scanning service at a11yowl.ai (the &ldquo;Service&rdquo;). By using the Service, you agree to the collection and use of information in accordance with this policy.
               </p>
             </section>
 
@@ -357,8 +357,8 @@ export default function PrivacyContent() {
                 </p>
                 <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
                   Website:{" "}
-                  <a href="https://a11yowl.com" className="text-owl-accent hover:underline font-medium">
-                    a11yowl.com
+                  <a href="https://a11yowl.ai" className="text-owl-accent hover:underline font-medium">
+                    a11yowl.ai
                   </a>
                 </p>
               </div>

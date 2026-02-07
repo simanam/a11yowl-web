@@ -40,7 +40,7 @@ export default function AccessibilityContent() {
                 Our Commitment
               </h2>
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-                A11y Owl is committed to ensuring digital accessibility for people with disabilities. As a product dedicated to helping others achieve web accessibility, we hold ourselves to the same high standards we encourage in our users. We are continually improving the user experience of a11yowl.com and applying the relevant accessibility standards to ensure we provide equal access to all users.
+                A11y Owl is committed to ensuring digital accessibility for people with disabilities. As a product dedicated to helping others achieve web accessibility, we hold ourselves to the same high standards we encourage in our users. We are continually improving the user experience of a11yowl.ai and applying the relevant accessibility standards to ensure we provide equal access to all users.
               </p>
             </section>
 
@@ -73,7 +73,7 @@ export default function AccessibilityContent() {
                 Measures We Take
               </h2>
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                We take the following measures to ensure accessibility of a11yowl.com:
+                We take the following measures to ensure accessibility of a11yowl.ai:
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
@@ -159,7 +159,7 @@ export default function AccessibilityContent() {
                 Feedback and Contact
               </h2>
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                We welcome your feedback on the accessibility of a11yowl.com. If you encounter any accessibility barriers or have suggestions for improvement, please contact us:
+                We welcome your feedback on the accessibility of a11yowl.ai. If you encounter any accessibility barriers or have suggestions for improvement, please contact us:
               </p>
               <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
                 <p className="text-sm text-slate-600 dark:text-slate-400">
@@ -173,8 +173,8 @@ export default function AccessibilityContent() {
                 </p>
                 <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
                   Website:{" "}
-                  <a href="https://a11yowl.com" className="text-owl-accent hover:underline font-medium">
-                    a11yowl.com
+                  <a href="https://a11yowl.ai" className="text-owl-accent hover:underline font-medium">
+                    a11yowl.ai
                   </a>
                 </p>
                 <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">

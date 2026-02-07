@@ -18,9 +18,9 @@ export const metadata: Metadata = {
     "free accessibility scan",
     "web accessibility testing",
   ],
-  metadataBase: new URL("https://a11yowl.com"),
+  metadataBase: new URL("https://a11yowl.ai"),
   alternates: {
-    canonical: "https://a11yowl.com",
+    canonical: "https://a11yowl.ai",
   },
   icons: {
     icon: [
@@ -35,13 +35,13 @@ export const metadata: Metadata = {
     title: "A11y Owl - Free ADA Compliance Scanner",
     description:
       "Find accessibility issues before a lawyer does. Free AI-powered WCAG scan in 60 seconds. No signup required.",
-    url: "https://a11yowl.com",
+    url: "https://a11yowl.ai",
     siteName: "A11y Owl",
     type: "website",
     locale: "en_US",
     images: [
       {
-        url: "/og-image.png",
+        url: "/assets/og_image.png",
         width: 1200,
         height: 630,
         alt: "A11y Owl - Free ADA Compliance Scanner powered by Vision AI",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     title: "A11y Owl - Free ADA Compliance Scanner",
     description:
       "Find accessibility issues before a lawyer does. Free AI-powered WCAG scan in 60 seconds.",
-    images: ["/og-image.png"],
+    images: ["/assets/og_image.png"],
   },
   robots: {
     index: true,
@@ -66,6 +66,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  manifest: "/manifest.json",
   authors: [{ name: "Logixtecs", url: "https://www.logixtecs.com/" }],
   creator: "Logixtecs",
   publisher: "Logixtecs",
@@ -76,11 +77,30 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebSite",
+      "@id": "https://a11yowl.ai/#website",
+      name: "A11y Owl",
+      url: "https://a11yowl.ai",
+      description:
+        "Free AI-powered website accessibility scanner for ADA and WCAG 2.2 compliance. Scan in 60 seconds, get code fixes and DIY action items.",
+      publisher: {
+        "@id": "https://a11yowl.ai/#organization",
+      },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: "https://a11yowl.ai/?url={search_term_string}",
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+    {
       "@type": "SoftwareApplication",
       name: "A11y Owl",
       description:
         "AI-powered website accessibility scanner that checks ADA and WCAG 2.2 AA compliance. Uses vision AI and keyboard testing to find accessibility issues that automated DOM-only scanners miss. Provides exact code fixes for every issue found.",
-      url: "https://a11yowl.com",
+      url: "https://a11yowl.ai",
       applicationCategory: "DeveloperApplication",
       operatingSystem: "Web",
       offers: [
@@ -120,10 +140,11 @@ const jsonLd = {
     },
     {
       "@type": "Organization",
+      "@id": "https://a11yowl.ai/#organization",
       name: "A11y Owl",
       legalName: "Logixtecs",
-      url: "https://a11yowl.com",
-      logo: "https://a11yowl.com/assets/A11YOWL_logo.png",
+      url: "https://a11yowl.ai",
+      logo: "https://a11yowl.ai/assets/A11YOWL_logo.png",
       description:
         "AI-powered website accessibility scanner for ADA and WCAG 2.2 compliance. A product of Logixtecs.",
       parentOrganization: {
@@ -245,8 +266,8 @@ const jsonLd = {
           "@type": "HowToStep",
           position: 1,
           name: "Enter your website URL",
-          text: "Go to a11yowl.com and paste your website URL into the scan field. Your scan automatically includes both a Compliance Risk Score and AIO Score.",
-          url: "https://a11yowl.com",
+          text: "Go to a11yowl.ai and paste your website URL into the scan field. Your scan automatically includes both a Compliance Risk Score and AIO Score.",
+          url: "https://a11yowl.ai",
         },
         {
           "@type": "HowToStep",
