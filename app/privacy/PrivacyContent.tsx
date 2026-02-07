@@ -327,10 +327,46 @@ export default function PrivacyContent() {
               </p>
             </section>
 
+            {/* Scoring Disclaimer */}
+            <section>
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-4">
+                10. Scan Results &amp; Scoring Disclaimer
+              </h2>
+              <div className="p-5 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800">
+                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                  A11y Owl provides automated accessibility scanning powered by AI agents and industry-standard tools (axe-core). While we strive for accuracy, our scan results and scores are <strong className="text-slate-900 dark:text-white">for informational purposes only</strong> and are subject to the following limitations:
+                </p>
+                <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-500 mt-0.5" aria-hidden="true">&bull;</span>
+                    <span><strong className="text-slate-900 dark:text-white">Scores may vary</strong> between scans due to dynamic content, network conditions, JavaScript rendering timing, and AI model responses. Minor score fluctuations are expected and do not necessarily indicate changes to your website.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-500 mt-0.5" aria-hidden="true">&bull;</span>
+                    <span><strong className="text-slate-900 dark:text-white">Automated scans cannot catch every issue.</strong> Studies show automated tools detect approximately 30-50% of WCAG violations. Issues requiring human judgment (e.g., whether alt text is meaningful, whether content is logically ordered) require manual review.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-500 mt-0.5" aria-hidden="true">&bull;</span>
+                    <span><strong className="text-slate-900 dark:text-white">This is not legal advice.</strong> A11y Owl reports do not constitute legal compliance certification. ADA, Section 508, EN 301 549, and other accessibility regulations may have requirements beyond what automated scanning can verify.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-500 mt-0.5" aria-hidden="true">&bull;</span>
+                    <span><strong className="text-slate-900 dark:text-white">For full compliance assurance,</strong> we strongly recommend engaging a qualified accessibility specialist or certified auditor to conduct a manual audit in addition to automated scanning.</span>
+                  </li>
+                </ul>
+                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mt-4">
+                  If you have questions about your scan results or need help interpreting your report, contact our team at{" "}
+                  <a href="mailto:a11y@logixtecs.com" className="text-owl-accent hover:underline font-medium">
+                    a11y@logixtecs.com
+                  </a>.
+                </p>
+              </div>
+            </section>
+
             {/* Changes */}
             <section>
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-4">
-                10. Changes to This Policy
+                11. Changes to This Policy
               </h2>
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
                 We may update this Privacy Policy from time to time. We will notify you of material changes by posting the updated policy on this page with a revised &ldquo;Last updated&rdquo; date. Your continued use of the Service after any changes constitutes acceptance of the updated policy.
@@ -340,7 +376,7 @@ export default function PrivacyContent() {
             {/* Contact */}
             <section>
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-4">
-                11. Contact Us
+                12. Contact Us
               </h2>
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
                 If you have questions about this Privacy Policy or wish to exercise your data rights, contact us at:
