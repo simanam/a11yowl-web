@@ -155,49 +155,25 @@ function LandingPageInner() {
               Our AI scanner finds what automated tools miss. 60 seconds. Free.
             </p>
 
-            {/* URL Input */}
-            <form onSubmit={handleScan} className="mt-8 sm:mt-10 max-w-xl mx-auto">
-              <label htmlFor="url-input" className="sr-only">
-                Website URL to scan
-              </label>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <input
-                  id="url-input"
-                  type="url"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  placeholder="Enter your website URL"
-                  className="w-full sm:flex-1 h-14 px-5 rounded-xl border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-base sm:text-lg placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-owl-accent focus:border-owl-accent"
-                  required
-                  aria-describedby={error ? "scan-error" : undefined}
-                  autoComplete="url"
-                />
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="h-14 sm:h-14 px-6 sm:px-8 bg-owl-accent hover:bg-owl-accent-hover text-white font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap min-w-[140px] sm:min-w-[160px]"
-                >
-                  {loading ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
-                      Scanning
-                    </span>
-                  ) : (
-                    "Scan Your Site Free"
-                  )}
-                </button>
-              </div>
-              {error && (
-                <p id="scan-error" className="mt-3 text-owl-danger text-sm" role="alert">
-                  {error}
+            {/* Coming Soon */}
+            <div className="mt-8 sm:mt-10 max-w-xl mx-auto">
+              <div className="flex flex-col items-center gap-4">
+                <div className="inline-flex items-center gap-2.5 py-3 px-8 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-semibold rounded-xl text-base sm:text-lg">
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  Coming Soon
+                </div>
+                <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
+                  Our web scanner is being upgraded with even more powerful AI analysis. Check back soon, or try our{" "}
+                  <a href="https://github.com/simanam/a11yowl-extension" target="_blank" rel="noopener noreferrer" className="text-owl-accent hover:underline font-medium">
+                    browser extension
+                  </a>{" "}
+                  for instant accessibility scanning.
                 </p>
-              )}
-
-            </form>
-
-            <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
-              No signup. No credit card. Results in 60 seconds.
-            </p>
+              </div>
+            </div>
           </div>
         </section>
 
